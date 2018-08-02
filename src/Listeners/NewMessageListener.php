@@ -1,8 +1,8 @@
 <?php
 
-namespace Happyphper\LaravelChat\Listeners;
+namespace Happyphper\LaravelMessage\Listeners;
 
-use Happyphper\LaravelChat\Models\MessageNotification;
+use Happyphper\LaravelMessage\Models\MessageNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class NewMessageListener implements ShouldQueue
@@ -12,7 +12,7 @@ class NewMessageListener implements ShouldQueue
      *
      * @var string|null
      */
-    public $queue = 'chat:listeners';
+    public $queue = 'laravel-message';
 
     /**
      * Handle the event.

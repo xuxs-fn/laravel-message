@@ -1,4 +1,4 @@
-# Laravel Chat
+# Laravel Message
 ## 项目介绍
 本项目旨在解决站内私信问题。仅支持用户一对一的私信发送，不支持群组。
 
@@ -10,11 +10,16 @@
 > 当用户发送时，自动创建提醒。
 > 当阅读私信时，自定完成将提醒设置已读。
 
+## 安装
+```command
+composer require happyphper/laravel-message
+```
+
 ## 发布文件
 ```command
-php artisan vendor:publish --tag=laravel-chat
+php artisan vendor:publish
 ```
-生成 migration 数据库迁移文件以及 laravel-chat.php 配置文件。
+生成 migration 数据库迁移文件以及 laravel-message.php 配置文件。
 
 ## 数据库迁移
 ```command
@@ -31,12 +36,12 @@ php artisan migrate
 ```php
 protected $listen = [
     ...
-    'Happyphper\LaravelChat\Events\NewMessageEvent' => [
-        'Happyphper\LaravelChat\Listeners\NewMessageListener',
-        'Happyphper\LaravelChat\Listeners\LastMessageListener',
+    'Happyphper\LaravelMessage\Events\NewMessageEvent' => [
+        'Happyphper\LaravelMessage\Listeners\NewMessageListener',
+        'Happyphper\LaravelMessage\Listeners\LastMessageListener',
     ],
-    'Happyphper\LaravelChat\Events\ReadMessageEvent' => [
-        'Happyphper\LaravelChat\Listeners\ReadMessageListener'
+    'Happyphper\LaravelMessage\Events\ReadMessageEvent' => [
+        'Happyphper\LaravelMessage\Listeners\ReadMessageListener'
     ]
     ...
 ];
@@ -45,15 +50,15 @@ protected $listen = [
 ## 方法
 ```php
 // 获取会话
-Happyphper\LaravelChat\Chat::getConversationBetweenUsers($userId, $opponentId)
+Happyphper\LaravelMessage\Chat::getConversationBetweenUsers($userId, $opponentId)
 // 发送私信
-Happyphper\LaravelChat\Chat::send($senderId, $recipientId, $body, $type = 'text')
+Happyphper\LaravelMessage\Chat::send($senderId, $recipientId, $body, $type = 'text')
 // 未读私信数
-Happyphper\LaravelChat\Chat::unread($userId)
+Happyphper\LaravelMessage\Chat::unread($userId)
 // 删除会话
-Happyphper\LaravelChat\Chat::deleteConversation($conversation)
+Happyphper\LaravelMessage\Chat::deleteConversation($conversation)
 // 删除私信
-Happyphper\LaravelChat\Chat::deleteMessage($conversation, $message)
+Happyphper\LaravelMessage\Chat::deleteMessage($conversation, $message)
 ```
 
 ## 示例
@@ -61,11 +66,13 @@ Happyphper\LaravelChat\Chat::deleteMessage($conversation, $message)
 // 发送私信
 public function store(Request $request)
 {
+    // 模拟登陆
+    auth()->loginUsingId(1);
     // 发送私信
-    $message = Chat::send(auth()->id(), $request->opponent_id, $request->body, $request->type);
+    list($message, $opponentMessage) = Chat::send(auth()->id(), $request->opponent_id, $request->body, $request->type);
     // 触发新私信事件
-    event(new NewMessageEvent($message));
-        
+    event(new  NewMessageEvent($message, $opponentMessage));
+
     return $message;
 }
 

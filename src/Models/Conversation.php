@@ -1,6 +1,6 @@
 <?php
 
-namespace Happyphper\LaravelChat\Models;
+namespace Happyphper\LaravelMessage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,12 +9,14 @@ class Conversation extends Model
     /**
      * @var array
      */
-    protected $table = 'chat_conversations';
-
-    /**
-     * @var array
-     */
     protected $guarded = ['id'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setTable(config('laravel-message.conversation_table'));
+    }
 
     /**
      * 最后的消息
@@ -33,7 +35,9 @@ class Conversation extends Model
      */
     public function user()
     {
-        return $this->belongsTo(config('laravel-chat.user_model'), 'user_id', 'id');
+        $user = config('laravel-message');
+
+        return $this->belongsTo($user['user_model'], 'user_id', $user['user_id']);
     }
 
     /**
@@ -43,7 +47,9 @@ class Conversation extends Model
      */
     public function opponent()
     {
-        return $this->belongsTo(config('laravel-chat.user_model'), 'opponent_id', 'id');
+        $user = config('laravel-message');
+
+        return $this->belongsTo($user['user_model'], 'opponent_id', $user['user_id']);
     }
 
     /**

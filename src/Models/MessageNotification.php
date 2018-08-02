@@ -1,19 +1,22 @@
 <?php
 
-namespace Happyphper\LaravelChat\Models;
+namespace Happyphper\LaravelMessage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class MessageNotification extends Model
 {
     /**
-     * @var string
-     */
-    protected $table = 'chat_message_notifications';
-    /**
      * @var array
      */
     protected $guarded = ['id'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setTable(config('laravel-message.message_notification_table'));
+    }
 
     /**
      * 会话
@@ -42,6 +45,6 @@ class MessageNotification extends Model
      */
     public function user()
     {
-        return $this->belongsTo(config('laravel-chat.user_model'), 'opponent', config('laravel-chat.user_id'));
+        return $this->belongsTo(config('laravel-message.user_model'), 'opponent_id', config('laravel-message.user_id'));
     }
 }

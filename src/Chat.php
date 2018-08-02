@@ -1,10 +1,10 @@
 <?php
 
-namespace Happyphper\LaravelChat;
+namespace Happyphper\LaravelMessage;
 
-use Happyphper\LaravelChat\Models\Conversation;
-use Happyphper\LaravelChat\Models\Message;
-use Happyphper\LaravelChat\Models\MessageNotification;
+use Happyphper\LaravelMessage\Models\Conversation;
+use Happyphper\LaravelMessage\Models\Message;
+use Happyphper\LaravelMessage\Models\MessageNotification;
 use Illuminate\Support\Facades\DB;
 
 class Chat
@@ -28,7 +28,7 @@ class Chat
      * @param $recipientId
      * @param $body
      * @param string $type
-     * @return Message
+     * @return array
      * @throws \Exception
      */
     public static function send($senderId, $recipientId, $body, $type = 'text')
@@ -54,7 +54,7 @@ class Chat
                 'type' => $type
             ]);
 
-            return ['message' => $message, 'opponentMessage' => $opponentMessage];
+            return [$message, $opponentMessage];
         });
     }
 

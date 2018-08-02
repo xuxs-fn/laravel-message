@@ -1,9 +1,9 @@
 <?php
 
-namespace Happyphper\LaravelChat\Events;
+namespace Happyphper\LaravelMessage\Events;
 
-use Happyphper\LaravelChat\Models\Conversation;
-use Happyphper\LaravelChat\Models\Message;
+use Happyphper\LaravelMessage\Models\Conversation;
+use Happyphper\LaravelMessage\Models\Message;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
